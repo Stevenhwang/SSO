@@ -3,6 +3,7 @@ import logging
 from tortoise.contrib.sanic import register_tortoise
 from settings import server_settings, db_settings
 from routers import routers
+from middlewares import auth, parse_query
 
 logging.basicConfig(level=logging.DEBUG)
 app = Sanic(name='admin')
@@ -11,13 +12,9 @@ app.config.update(db_settings)
 
 
 @app.middleware('request')
-async def add_key(request):
-    request.ctx.foo = 'bar'
-
-
-@app.middleware('request')
-async def parse_query(request):
-    request.ctx.query = eval(str(request.args).replace('[', '').replace(']', ''))
+async def use_auth(request):
+    auth(request)
+    parse_query(request)
 
 
 for router in routers:
