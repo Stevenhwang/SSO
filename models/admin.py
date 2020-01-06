@@ -4,11 +4,11 @@ from datetime import datetime
 
 
 class User(BaseModel, TimestampMixin):
-    password = fields.CharField(128, null=True)
-    email = fields.CharField(50, unique=True, null=True)
-    tel = fields.CharField(11)  # 手机号
-    no = fields.CharField(50)  # 工号
-    department = fields.CharField(64)  # 部门
+    password = fields.CharField(128)
+    email = fields.CharField(50, unique=True)
+    tel = fields.CharField(11, null=True)  # 手机号
+    no = fields.CharField(50, null=True)  # 工号
+    department = fields.CharField(64, null=True)  # 部门
     google_key = fields.CharField(80)  # 谷歌动态认证
     is_super = fields.BooleanField(default=False)  # 是否为超级用户
     status = fields.BooleanField(default=False)  # 是否启用
