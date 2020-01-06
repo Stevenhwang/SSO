@@ -4,3 +4,4 @@ aiomysql
 PyJWT
 aioredis
 pyotp
+shortuuid
