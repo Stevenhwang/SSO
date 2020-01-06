@@ -1,0 +1,6 @@
+sanic
+tortoise-orm
+aiomysql
+PyJWT
+aioredis
+pyotp

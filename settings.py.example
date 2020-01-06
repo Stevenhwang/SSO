@@ -1,0 +1,25 @@
+server_settings = {
+    'SERVER_HOST': '0.0.0.0',
+    'SERVER_PORT': 8000,
+    'SERVER_DEBUG': True
+}
+
+db_settings = {
+    'DB_HOST': '192.168.183.135',
+    'DB_PORT': 3306,
+    'DB_NAME': 'xops',
+    'DB_USER': 'root',
+    'DB_PASS': '6s?f!hgGeWsg123qwe'
+}
+
+redis_settings = {
+    'REDIS_HOST': '192.168.183.135',
+    'REDIS_PORT': 6379,
+    'REDIS_PASS': 'cWCVKJ7ZHUK12mVbivUf',
+    'REDIS_DB': 10
+}
+
+jwt_settings = {
+    'EXP': 1,
+    'SECRET': 'pXFb4i%*834gfdh963df718iodGq4dsafsdadg7yI6ImF1999aaG7'
+}

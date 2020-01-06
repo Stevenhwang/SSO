@@ -1,0 +1,63 @@
+from tortoise import fields
+from tortoise.models import Model
+from tortoise.query_utils import Q
+import ciso8601
+from datetime import datetime
+
+
+class TimestampMixin:
+    created_at = fields.DatetimeField(default=datetime.now)
+    updated_at = fields.DatetimeField(default=datetime.now)
+
+    def touch(self):
+        self.updated_at = datetime.now()
+
+
+class BaseModel(Model):
+    id = fields.IntField(pk=True)
+    name = fields.CharField(128, unique=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+    def to_dict(self, only=None, exclude=None):
+        if only:
+            fs = only
+        elif exclude:
+            fs = [f for f in self._meta.fields if f not in exclude]
+        else:
+            fs = self._meta.fields
+
+        data = {}
+        for f in fs:
+            if self._meta.fields_map[f].SQL_TYPE == 'TIMESTAMP':
+                data.update({f: str(getattr(self, f))})
+            else:
+                data.update({f: getattr(self, f)})
+        return data
+
+    @classmethod
+    async def search(cls, attributes=None, **query):
+        fs_map = cls._meta.fields_map
+        search = query.get('search')
+        page = int(query.pop('page')) if query.get('page') else 1
+        limit = int(query.pop('limit')) if query.get('limit') else 15
+        if not attributes:
+            attributes = [a for a in fs_map.keys() if isinstance(fs_map[a], fields.CharField)]
+        for k, v in query.items():
+            if isinstance(fs_map.get(k.split('__')[0]), fields.DatetimeField):
+                query[k] = ciso8601.parse_datetime(v)
+        if search:
+            search_list = search.split(',')
+            query.pop('search')
+            if len(search_list) > 1:
+                attr_dict_list = [{a + '__in': search_list} for a in attributes]
+            else:
+                attr_dict_list = [{a + '__icontains': search} for a in attributes]
+            q_list = [Q(**a) for a in attr_dict_list]
+            return await cls.filter(Q(*q_list, join_type="OR")).filter(**query).limit(limit).offset((page - 1) * limit)
+        else:
+            return await cls.filter(**query).limit(limit).offset((page - 1) * limit)
