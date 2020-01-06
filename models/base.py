@@ -2,15 +2,12 @@ from tortoise import fields
 from tortoise.models import Model
 from tortoise.query_utils import Q
 import ciso8601
-from datetime import datetime
+from models.patch import NewDateTimeField
 
 
 class TimestampMixin:
-    created_at = fields.DatetimeField(default=datetime.now)
-    updated_at = fields.DatetimeField(default=datetime.now)
-
-    def touch(self):
-        self.updated_at = datetime.now()
+    created_at = NewDateTimeField(auto_now=True)
+    updated_at = NewDateTimeField(auto_now_add=True)
 
 
 class BaseModel(Model):
