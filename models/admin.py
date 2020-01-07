@@ -1,6 +1,5 @@
 from tortoise import fields
 from models.base import TimestampMixin, BaseModel
-from datetime import datetime
 
 
 class User(BaseModel, TimestampMixin):

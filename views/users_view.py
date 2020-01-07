@@ -8,21 +8,11 @@ import base64
 import shortuuid
 
 
-class BaseUserView(HTTPMethodView):
-    @staticmethod
-    async def set_user(uid):
-        u = await User.get_or_none(id=uid)
-        if not u:
-            return json(dict(code=-1, msg='用户不存在'))
-        else:
-            return u
-
-
 class UsersView(HTTPMethodView):
     async def get(self, request):
         users = await User.search(**request.ctx.query)
-        return json(dict(data=[user.to_dict(exclude=['password', 'google_key']) for user in users],
-                         count=users.count(), code=0, msg="成功"))
+        return json(dict(data=[user.to_dict(exclude=['password', 'google_key', 'roles']) for user in users],
+                         count=len(users), code=0, msg="成功"))
 
     async def post(self, request):
         data = request.json
@@ -32,7 +22,7 @@ class UsersView(HTTPMethodView):
         eu = await User.filter(Q(name=data['name']) | Q(email=data['email']))
         if eu:
             return json(dict(code=-1, msg='用户名或邮箱有重复！'))
-        password = '7d491c440ba46ca20fde0c5be1377aec' if not data['password'] else gen_md5(data['password'])
+        password = '7d491c440ba46ca20fde0c5be1377aec' if not data.get('password') else gen_md5(data['password'])
         mfa = base64.b32encode(bytes(
             str(shortuuid.uuid() + shortuuid.uuid())[:-9], encoding="utf-8")).decode("utf-8")
         data.update(dict(password=password, mfa=mfa))
@@ -41,26 +31,32 @@ class UsersView(HTTPMethodView):
         return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：shenshuo'))
 
 
-class UserView(BaseUserView):
+class UserView(HTTPMethodView):
     async def put(self, request, uid):
         data = request.json
         eu = await User.filter(Q(name=data['name']) | Q(email=data['email']))
         if eu:
             return json(dict(code=-1, msg='用户名或邮箱有重复！'))
-        u = await self.set_user(uid)
+        u = await User.get_or_none(id=uid)
+        if not u:
+            return json(dict(code=-1, msg='用户不存在'))
         for k, v in data.items():
             setattr(u, k, v)
         await u.save()
         return json(dict(code=0, msg='编辑成功'))
 
     async def delete(self, request, uid):
-        u = await self.set_user(uid)
+        u = await User.get_or_none(id=uid)
+        if not u:
+            return json(dict(code=-1, msg='用户不存在'))
         await u.delete()
         return json(dict(code=0, msg='删除成功'))
 
     async def patch(self, request, uid):
         # 用户启用禁用
-        u = await self.set_user(uid)
+        u = await User.get_or_none(id=uid)
+        if not u:
+            return json(dict(code=-1, msg='用户不存在'))
         status = u.status
         if u.is_super:
             return json(dict(code=-2, msg='系统管理员用户无法禁用!'))

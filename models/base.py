@@ -30,7 +30,7 @@ class BaseModel(Model):
 
         data = {}
         for f in fs:
-            if self._meta.fields_map[f].SQL_TYPE == 'TIMESTAMP':
+            if isinstance(self._meta.fields_map[f], fields.DatetimeField):
                 data.update({f: str(getattr(self, f))})
             else:
                 data.update({f: getattr(self, f)})
