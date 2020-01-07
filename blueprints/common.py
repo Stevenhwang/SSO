@@ -26,4 +26,9 @@ async def use_auth(request):
     request.ctx.username = user_info.get('username')
     request.ctx.is_super = user_info.get('is_super')
     # parse query args middleware
-    request.ctx.query = eval(str(request.args).replace('[', '').replace(']', ''))
+    raw_args = eval(str(request.args).replace('[', '').replace(']', ''))
+    for k, v in raw_args.items():
+        if ',' in v:
+            raw_args[k] = v.split(',')
+    request.ctx.query = raw_args
+    print(request.ctx.query)

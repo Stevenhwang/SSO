@@ -23,9 +23,9 @@ class Role(BaseModel, TimestampMixin):
     # 角色表
     status = fields.BooleanField(default=False)  # 是否启用
     users = fields.ManyToManyField('models.User', related_name='roles', through='role_user')
-    components = fields.ManyToManyField('models.Component', related_name='components', through='role_component')
-    menus = fields.ManyToManyField('models.Menu', related_name='menus', through='role_menu')
-    functions = fields.ManyToManyField('models.Function', related_name='functions', through='role_function')
+    components = fields.ManyToManyField('models.Component', related_name='roles', through='role_component')
+    menus = fields.ManyToManyField('models.Menu', related_name='roles', through='role_menu')
+    functions = fields.ManyToManyField('models.Function', related_name='roles', through='role_function')
 
     class Meta:
         table = "roles"
