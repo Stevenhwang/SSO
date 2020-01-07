@@ -2,9 +2,20 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 from models.admin import User
 from utils.tools import gen_md5
+from utils.redis_conn import redis_conn
 from tortoise.query_utils import Q
 import base64
 import shortuuid
+
+
+class BaseUserView(HTTPMethodView):
+    @staticmethod
+    async def set_user(uid):
+        u = await User.get_or_none(id=uid)
+        if not u:
+            return json(dict(code=-1, msg='用户不存在'))
+        else:
+            return u
 
 
 class UsersView(HTTPMethodView):
@@ -28,3 +39,37 @@ class UsersView(HTTPMethodView):
         nu = User(**data)
         await nu.save()
         return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：shenshuo'))
+
+
+class UserView(BaseUserView):
+    async def put(self, request, uid):
+        data = request.json
+        eu = await User.filter(Q(name=data['name']) | Q(email=data['email']))
+        if eu:
+            return json(dict(code=-1, msg='用户名或邮箱有重复！'))
+        u = await self.set_user(uid)
+        for k, v in data.items():
+            setattr(u, k, v)
+        await u.save()
+        return json(dict(code=0, msg='编辑成功'))
+
+    async def delete(self, request, uid):
+        u = await self.set_user(uid)
+        await u.delete()
+        return json(dict(code=0, msg='删除成功'))
+
+    async def patch(self, request, uid):
+        # 用户启用禁用
+        u = await self.set_user(uid)
+        status = u.status
+        if u.is_super:
+            return json(dict(code=-2, msg='系统管理员用户无法禁用!'))
+        if status:
+            u.status = False
+            await u.save()
+            await redis_conn('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+            return json(dict(code=0, msg='用户禁用成功'))
+        else:
+            u.status = True
+            await u.save()
+            return json(dict(code=0, msg='用户启用成功'))
