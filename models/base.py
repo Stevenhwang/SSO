@@ -6,8 +6,8 @@ from models.patch import NewDateTimeField
 
 
 class TimestampMixin:
-    created_at = NewDateTimeField(auto_now=True)
-    updated_at = NewDateTimeField(auto_now_add=True)
+    created_at = NewDateTimeField(auto_now_add=True)
+    updated_at = NewDateTimeField(auto_now=True)
 
 
 class BaseModel(Model):
