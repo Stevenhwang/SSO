@@ -25,7 +25,7 @@ class UsersView(HTTPMethodView):
         password = '7d491c440ba46ca20fde0c5be1377aec' if not data.get('password') else gen_md5(data['password'])
         mfa = base64.b32encode(bytes(
             str(shortuuid.uuid() + shortuuid.uuid())[:-9], encoding="utf-8")).decode("utf-8")
-        data.update(dict(password=password, mfa=mfa))
+        data.update(dict(password=password, google_key=mfa))
         nu = User(**data)
         await nu.save()
         return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：shenshuo'))

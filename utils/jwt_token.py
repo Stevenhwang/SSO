@@ -8,7 +8,7 @@ class AuthToken:
         self.token_secret = jwt_settings.get('SECRET')
 
     def encode_token(self, **kwargs):
-        exp = kwargs.get('exp', jwt_settings.get('EXP'))
+        exp = kwargs.get('exp', 1)
         payload = {
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=int(exp), seconds=10),
             'nbf': datetime.datetime.utcnow() - datetime.timedelta(seconds=10),

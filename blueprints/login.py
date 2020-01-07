@@ -17,7 +17,7 @@ async def login(request):
     password = data.get('password')
     dynamic = data.get('dynamic')
     # token 过期时间1天
-    exp_time = 1
+    exp = 1
 
     if not username or not password:
         return json(dict(code=-1, msg='账号密码不能为空'))
@@ -38,17 +38,17 @@ async def login(request):
             t_otp = pyotp.TOTP(user.google_key)
             if t_otp.now() != str(dynamic):
                 return json(dict(code=-5, msg='MFA错误'))
-        # 生成token
-        token_info = dict(user_id=user.id, username=user.name,
-                          email=user.email, is_super=user.is_super, exp_time=exp_time)
-        gen_token = AuthToken()
-        auth_token = gen_token.encode_token(**token_info)
-        auth_token.decode()
-        # 将token写入redis
-        await redis_conn('set', user.id, f"uid_{user.id}_auth_token", exp_time)
-        login_ip_list = request.headers.get("X-Forwarded-For")
-        if login_ip_list:
-            user.last_ip = login_ip_list.split(",")[0]
-        user.last_login_time = datetime.now()
-        await user.save()
-        return json(dict(code=0, auth_token=auth_token.decode(), username=user.name, msg='登录成功'))
+    # 生成token
+    token_info = dict(user_id=user.id, username=user.name,
+                      email=user.email, is_super=user.is_super, exp=exp)
+    gen_token = AuthToken()
+    auth_token = gen_token.encode_token(**token_info)
+    auth_token.decode()
+    # 将token写入redis
+    await redis_conn('set', user.id, f"uid_{user.id}_auth_token", exp)
+    login_ip_list = request.headers.get("X-Forwarded-For")
+    if login_ip_list:
+        user.last_ip = login_ip_list.split(",")[0]
+    user.last_login_time = datetime.now()
+    await user.save()
+    return json(dict(code=0, auth_token=auth_token.decode(), username=user.name, msg='登录成功'))

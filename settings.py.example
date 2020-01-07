@@ -20,6 +20,5 @@ redis_settings = {
 }
 
 jwt_settings = {
-    'EXP': 1,
     'SECRET': 'pXFb4i%*834gfdh963df718iodGq4dsafsdadg7yI6ImF1999aaG7'
 }
