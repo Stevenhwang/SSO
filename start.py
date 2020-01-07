@@ -15,6 +15,7 @@ app.config.update(db_settings)
 
 @app.middleware('request')
 async def use_auth(request):
+    # auth middleware
     token = request.headers.get('Auth-Token')
     user_info = AuthToken().decode_token(token)
     if not token:
@@ -27,10 +28,7 @@ async def use_auth(request):
     request.ctx.user_id = user_info.get('user_id')
     request.ctx.username = user_info.get('username')
     request.ctx.is_super = user_info.get('is_super')
-
-
-@app.middleware('request')
-async def user_parse_query(request):
+    # parse query args middleware
     request.ctx.query = eval(str(request.args).replace('[', '').replace(']', ''))
 
 
