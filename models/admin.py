@@ -4,22 +4,24 @@ from datetime import datetime
 
 
 class User(BaseModel, TimestampMixin):
+    # 用户表
     password = fields.CharField(128)
-    email = fields.CharField(50, unique=True)
+    email = fields.CharField(50, unique=True, null=True)
     tel = fields.CharField(11, null=True)  # 手机号
     no = fields.CharField(50, null=True)  # 工号
     department = fields.CharField(64, null=True)  # 部门
-    google_key = fields.CharField(80)  # 谷歌动态认证
+    google_key = fields.CharField(80, null=True)  # 谷歌动态认证
     is_super = fields.BooleanField(default=False)  # 是否为超级用户
     status = fields.BooleanField(default=False)  # 是否启用
-    last_ip = fields.CharField(32)  # 记录登录ip
-    last_login_time = fields.DatetimeField(default=datetime.now)  # 记录登录时间
+    last_ip = fields.CharField(32, null=True)  # 记录登录ip
+    last_login_time = fields.DatetimeField(null=True)  # 记录登录时间
 
     class Meta:
         table = "users"
 
 
 class Role(BaseModel, TimestampMixin):
+    # 角色表
     status = fields.BooleanField(default=False)  # 是否启用
     users = fields.ManyToManyField('models.User', related_name='roles', through='role_user')
     components = fields.ManyToManyField('models.Component', related_name='components', through='role_component')
