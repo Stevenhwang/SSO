@@ -6,7 +6,7 @@ from models.admin import Component
 class ComponentsView(HTTPMethodView):
     async def get(self, request):
         components = await Component.search(**request.ctx.query)
-        return json(dict(data=[components.to_dict() for components in components],
+        return json(dict(data=[components.to_dict(exclude=['roles']) for components in components],
                          count=len(components), code=0, msg="成功"))
 
     async def post(self, request):
