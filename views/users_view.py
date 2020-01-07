@@ -34,9 +34,6 @@ class UsersView(HTTPMethodView):
 class UserView(HTTPMethodView):
     async def put(self, request, uid):
         data = request.json
-        eu = await User.filter(Q(name=data['name']) | Q(email=data['email']))
-        if eu:
-            return json(dict(code=-1, msg='用户名或邮箱有重复！'))
         u = await User.get_or_none(id=uid)
         if not u:
             return json(dict(code=-1, msg='用户不存在'))
