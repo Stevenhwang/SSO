@@ -42,6 +42,7 @@ class BaseModel(Model):
         search = query.get('search')
         page = int(query.pop('page')) if query.get('page') else 1
         limit = int(query.pop('limit')) if query.get('limit') else 15
+        order_by = query.pop('order_by') if query.get('order_by') else 'id'
         if not attributes:
             attributes = [a for a in fs_map.keys() if isinstance(fs_map[a], fields.CharField)]
         for k, v in query.items():
@@ -55,6 +56,8 @@ class BaseModel(Model):
             else:
                 attr_dict_list = [{a + '__icontains': search} for a in attributes]
             q_list = [Q(**a) for a in attr_dict_list]
-            return await cls.filter(Q(*q_list, join_type="OR")).filter(**query).limit(limit).offset((page - 1) * limit)
+            return await cls.filter(Q(*q_list, join_type="OR")).filter(**query) \
+                .limit(limit).offset((page - 1) * limit).order_by(order_by)
         else:
-            return await cls.filter(**query).limit(limit).offset((page - 1) * limit)
+            return await cls.filter(**query).limit(limit).offset((page - 1) * limit) \
+                .order_by(order_by)
