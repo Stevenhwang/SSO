@@ -47,7 +47,7 @@ async def login(request):
     # 将token写入redis
     await redis_conn('set', f"uid_{user.id}_auth_token", auth_token)
     # 设置过期时间
-    await redis_conn('expire', f"uid_{user.id}_auth_token", 86400*exp)
+    await redis_conn('expire', f"uid_{user.id}_auth_token", 86400 * exp)
     login_ip_list = request.headers.get("X-Forwarded-For")
     if login_ip_list:
         user.last_login_ip = login_ip_list.split(",")[0]
