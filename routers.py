@@ -4,6 +4,7 @@ from views.menus_view import MenusView, MenuView
 from views.components_view import ComponentsView, ComponentView
 from views.functions_view import FunctionsView, FunctionView
 from views.auth_view import AuthView
+from views.token_view import TokenView
 
 routers = [
     (UsersView.as_view(), '/users'),
@@ -18,4 +19,5 @@ routers = [
     (FunctionsView.as_view(), '/functions'),
     (FunctionView.as_view(), '/function/<fid:int>'),
     (AuthView.as_view(), '/auth'),
+    (TokenView.as_view(), '/token'),
 ]
