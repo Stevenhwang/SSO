@@ -31,4 +31,3 @@ async def use_auth(request):
         if ',' in v:
             raw_args[k] = v.split(',')
     request.ctx.query = raw_args
-    print(request.ctx.query)
