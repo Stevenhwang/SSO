@@ -2,16 +2,14 @@ from sanic import Sanic
 import logging
 from tortoise.contrib.sanic import register_tortoise
 from settings import server_settings, db_settings
-from blueprints.common import common_bp
-from blueprints.login import login_bp
+from blueprints import api
 
 logging.basicConfig(level=logging.DEBUG)
 app = Sanic(name='admin')
 app.config.update(server_settings)
 app.config.update(db_settings)
 
-app.blueprint(common_bp)
-app.blueprint(login_bp)
+app.blueprint(api)
 
 db_config = {
     'connections': {
