@@ -1,10 +1,7 @@
 server_settings = {
     'SERVER_HOST': '0.0.0.0',
     'SERVER_PORT': 8000,
-    'SERVER_DEBUG': True,
-    'REQUEST_TIMEOUT': 120,
-    'RESPONSE_TIMEOUT': 120,
-    'KEEP_ALIVE_TIMEOUT': 10
+    'SERVER_DEBUG': True
 }
 
 db_settings = {
