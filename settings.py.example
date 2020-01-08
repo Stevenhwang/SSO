@@ -1,7 +1,10 @@
 server_settings = {
     'SERVER_HOST': '0.0.0.0',
     'SERVER_PORT': 8000,
-    'SERVER_DEBUG': True
+    'SERVER_DEBUG': True,
+    'REQUEST_TIMEOUT': 120,
+    'RESPONSE_TIMEOUT': 120,
+    'KEEP_ALIVE_TIMEOUT': 10
 }
 
 db_settings = {
@@ -14,7 +17,7 @@ db_settings = {
 
 redis_settings = {
     'REDIS_HOST': '192.168.183.135',
-    'REDIS_PORT': 6379,
+    'REDIS_PORT': '6379',
     'REDIS_PASS': 'cWCVKJ7ZHUK12mVbivUf',
     'REDIS_DB': 10
 }
