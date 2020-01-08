@@ -2,6 +2,14 @@ from tortoise import fields
 from models.base import TimestampMixin, BaseModel
 
 
+# class Robot(BaseModel, TimestampMixin):
+#     # 机器人表
+#     token = fields.CharField(128)  # token
+#     status = fields.BooleanField(default=False)  # 是否启用
+#     allowed_services = fields.JSONField(null=True)  # 允许访问的服务
+#     from_ip = fields.CharField(32, null=True)  # 记录来源ip
+
+
 class User(BaseModel, TimestampMixin):
     # 用户表
     password = fields.CharField(128)
@@ -12,7 +20,7 @@ class User(BaseModel, TimestampMixin):
     google_key = fields.CharField(80, null=True)  # 谷歌动态认证
     is_super = fields.BooleanField(default=False)  # 是否为超级用户
     status = fields.BooleanField(default=False)  # 是否启用
-    last_ip = fields.CharField(32, null=True)  # 记录登录ip
+    last_login_ip = fields.CharField(32, null=True)  # 记录登录ip
     last_login_time = fields.DatetimeField(null=True)  # 记录登录时间
 
     class Meta:
