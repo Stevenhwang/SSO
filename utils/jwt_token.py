@@ -1,5 +1,4 @@
 import jwt
-import datetime
 from settings import jwt_settings
 
 

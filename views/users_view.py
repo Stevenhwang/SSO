@@ -75,7 +75,7 @@ class LogoutView(HTTPMethodView):
         await redis_conn('delete', f"uid_{uid}_auth_token")
         return json(dict(code=0, msg='注销成功'))
 
-    async def patch(self, request):
+    async def put(self, request):
         # 用户重置密码
         data = request.json
         old_password = data.get('old_password')
