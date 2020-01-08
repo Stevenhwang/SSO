@@ -40,7 +40,7 @@ async def login(request):
                 return json(dict(code=-5, msg='MFA错误'))
     # 生成token
     token_info = dict(user_id=user.id, username=user.name,
-                      email=user.email, is_super=user.is_super, exp=exp)
+                      email=user.email, is_super=user.is_super)
     gen_token = AuthToken()
     auth_token = gen_token.encode_token(**token_info)
     auth_token.decode()
