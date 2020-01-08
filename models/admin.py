@@ -22,6 +22,7 @@ class User(BaseModel, TimestampMixin):
     status = fields.BooleanField(default=False)  # 是否启用
     last_login_ip = fields.CharField(32, null=True)  # 记录登录ip
     last_login_time = fields.DatetimeField(null=True)  # 记录登录时间
+    roles: fields.ManyToManyRelation["Role"]  # 关联
 
     class Meta:
         table = "users"
@@ -43,6 +44,7 @@ class Component(BaseModel, TimestampMixin):
     # 前端权限组件表
     remark = fields.CharField(128, null=True)
     status = fields.BooleanField(default=False)  # 是否启用
+    roles: fields.ManyToManyRelation[Role]  # 关联
 
     class Meta:
         table = "components"
@@ -52,6 +54,7 @@ class Menu(BaseModel, TimestampMixin):
     # 前端权限菜单表
     remark = fields.CharField(128, null=True)
     status = fields.BooleanField(default=False)  # 是否启用
+    roles: fields.ManyToManyRelation[Role]  # 关联
 
     class Meta:
         table = "menus"
@@ -62,6 +65,7 @@ class Function(BaseModel, TimestampMixin):
     uri = fields.CharField(128)
     method_type = fields.CharField(16)
     status = fields.BooleanField(default=False)  # 是否启用
+    roles: fields.ManyToManyRelation[Role]  # 关联
 
     class Meta:
         table = "functions"
