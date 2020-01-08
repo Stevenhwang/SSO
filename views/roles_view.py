@@ -25,30 +25,16 @@ class RoleView(HTTPMethodView):
     async def post(self, request, rid):
         # 给角色分配资源
         data = request.json
-        user_list = data.get('user_list')
-        comp_list = data.get('comp_list')
-        menu_list = data.get('menu_list')
-        func_list = data.get('func_list')
-
-        r = await Role.get_or_none(id=rid)
-        if not r:
+        records = list(data.keys())[0]
+        role = await Role.get_or_none(id=rid)
+        if not role:
             return json(dict(code=-1, msg='角色不存在'))
-        if user_list or user_list == []:
-            await r.users.clear()
-            for uid in user_list:
-                await r.users.add(User.get(id=uid))
-        if comp_list or comp_list == []:
-            await r.components.clear()
-            for cid in comp_list:
-                await r.components.add(Component.get(id=cid))
-        if menu_list or menu_list == []:
-            await r.menus.clear()
-            for mid in menu_list:
-                await r.menus.add(User.get(id=mid))
-        if func_list or func_list == []:
-            await r.functions.clear()
-            for fid in func_list:
-                await r.functions.add(Function.get(id=fid))
+        await getattr(getattr(role, records), 'clear')()
+        if data.get(records):
+            async for record in eval(f"{records.rstrip('s').capitalize()}.filter(id__in={data.get(records)})"):
+                await getattr(getattr(role, 'users'), 'add')(record)
+
+        return json(dict(code=0, msg='更新成功'))
 
     async def put(self, request, rid):
         data = request.json
