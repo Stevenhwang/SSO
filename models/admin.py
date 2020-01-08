@@ -2,14 +2,6 @@ from tortoise import fields
 from models.base import TimestampMixin, BaseModel
 
 
-# class Robot(BaseModel, TimestampMixin):
-#     # 机器人表
-#     token = fields.CharField(128)  # token
-#     status = fields.BooleanField(default=False)  # 是否启用
-#     allowed_services = fields.JSONField(null=True)  # 允许访问的服务
-#     from_ip = fields.CharField(32, null=True)  # 记录来源ip
-
-
 class User(BaseModel, TimestampMixin):
     # 用户表
     password = fields.CharField(128)
