@@ -35,6 +35,7 @@ db_config = {
     }
 }
 
+# 初始化数据库连接
 register_tortoise(
     app,
     config=db_config,

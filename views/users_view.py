@@ -2,7 +2,6 @@ from sanic.response import json
 from sanic.views import HTTPMethodView
 from models.admin import User
 from utils.tools import gen_md5
-from utils.redis_conn import redis_conn
 from tortoise.query_utils import Q
 import base64
 import shortuuid
@@ -60,7 +59,7 @@ class UserView(HTTPMethodView):
         if status:
             u.status = False
             await u.save()
-            await redis_conn('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+            await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
             return json(dict(code=0, msg='用户禁用成功'))
         else:
             u.status = True
