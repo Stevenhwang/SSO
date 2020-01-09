@@ -54,7 +54,8 @@ async def init_redis_pool(app, loop):
     app.redis = redis
 
 
-# 订阅redis日志任务
+# 订阅redis日志任务(是否废弃？)
+# FIXME
 @app.listener('after_server_start')
 async def sub_redis_log(app, loop):
     channel, = await app.redis.subscribe('ops_log')
