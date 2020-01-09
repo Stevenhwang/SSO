@@ -61,3 +61,15 @@ class Function(BaseModel, TimestampMixin):
 
     class Meta:
         table = "functions"
+
+
+class SysLog(BaseModel, TimestampMixin):
+    # 系统日志
+    name = fields.CharField(128)
+    method = fields.CharField(16)
+    uri = fields.CharField(512)
+    data = fields.TextField(null=True)
+    login_ip = fields.CharField(64, null=True)
+
+    class Meta:
+        table = "sys_log"
