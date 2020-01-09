@@ -47,7 +47,7 @@ redis = None
 
 # 初始化redis连接池
 @app.listener('before_server_start')
-async def notify_server_started(app, loop):
+async def init_redis_pool(app, loop):
     print('before_server_start')
     global redis
     redis = await aioredis.create_redis_pool(
@@ -59,7 +59,7 @@ async def notify_server_started(app, loop):
 
 # 订阅redis日志
 @app.listener('after_server_start')
-async def notify_server_started(app, loop):
+async def sub_redis_log(app, loop):
     print('after_server_start')
     channel, = await redis.subscribe('ops_log')
     app.add_task(log_sub(channel))
@@ -67,7 +67,7 @@ async def notify_server_started(app, loop):
 
 # 关闭redis连接池
 @app.listener('before_server_stop')
-async def notify_server_stopping(app, loop):
+async def close_redis_pool(app, loop):
     print('before_server_stop')
     redis.close()
     await redis.wait_closed()
