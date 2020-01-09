@@ -41,36 +41,30 @@ register_tortoise(
     generate_schemas=True
 )
 
-# 初始化redis
-redis = None
-
 
 # 初始化redis连接池
 @app.listener('before_server_start')
 async def init_redis_pool(app, loop):
-    print('before_server_start')
-    global redis
     redis = await aioredis.create_redis_pool(
         f"redis://{redis_settings.get('REDIS_HOST')}:{redis_settings.get('REDIS_PORT')}",
         password=redis_settings.get('REDIS_PASS'),
         db=redis_settings.get('REDIS_DB')
     )
+    app.redis = redis
 
 
-# 订阅redis日志
+# 订阅redis日志任务
 @app.listener('after_server_start')
 async def sub_redis_log(app, loop):
-    print('after_server_start')
-    channel, = await redis.subscribe('ops_log')
+    channel, = await app.redis.subscribe('ops_log')
     app.add_task(log_sub(channel))
 
 
 # 关闭redis连接池
 @app.listener('before_server_stop')
 async def close_redis_pool(app, loop):
-    print('before_server_stop')
-    redis.close()
-    await redis.wait_closed()
+    app.redis.close()
+    await app.redis.wait_closed()
 
 
 if __name__ == "__main__":
