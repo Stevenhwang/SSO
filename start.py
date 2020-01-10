@@ -6,6 +6,8 @@ from blueprints import api
 import aioredis
 from settings import redis_settings
 # from tasks.log_sub import log_sub
+from sanic.response import text
+from sanic.exceptions import NotFound
 
 logging.basicConfig(level=logging.DEBUG)
 app = Sanic(name='admin')
@@ -68,6 +70,10 @@ async def close_redis_pool(app, loop):
     app.redis.close()
     await app.redis.wait_closed()
 
+
+@app.exception(NotFound)
+async def ignore_404s(request, exception):
+    return text(f"Too naive!!! {request.url} is not allowed, young boy!")
 
 if __name__ == "__main__":
     app.run(host=app.config.SERVER_HOST,
