@@ -1,4 +1,6 @@
 from sanic import Sanic
+from sanic.response import text
+from sanic.exceptions import NotFound
 import logging
 from tortoise.contrib.sanic import register_tortoise
 from settings import server_settings, db_settings
@@ -6,8 +8,6 @@ from blueprints import api
 import aioredis
 from settings import redis_settings
 # from tasks.log_sub import log_sub
-from sanic.response import text
-from sanic.exceptions import NotFound
 
 logging.basicConfig(level=logging.DEBUG)
 app = Sanic(name='admin')
@@ -71,9 +71,10 @@ async def close_redis_pool(app, loop):
     await app.redis.wait_closed()
 
 
+# 捕捉404路由
 @app.exception(NotFound)
 async def ignore_404s(request, exception):
-    return text(f"Too naive!!! {request.path} is not allowed, young boy!")
+    return text(f"Too naive!!! {request.path} is not allowed, baby!")
 
 if __name__ == "__main__":
     app.run(host=app.config.SERVER_HOST,
