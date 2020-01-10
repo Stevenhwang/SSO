@@ -73,7 +73,7 @@ async def close_redis_pool(app, loop):
 
 @app.exception(NotFound)
 async def ignore_404s(request, exception):
-    return text(f"Too naive!!! {request.url} is not allowed, young boy!")
+    return text(f"Too naive!!! {request.path} is not allowed, young boy!")
 
 if __name__ == "__main__":
     app.run(host=app.config.SERVER_HOST,
