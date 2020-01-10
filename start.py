@@ -39,5 +39,6 @@ async def close_redis_pool(app, loop):
 async def ignore_404s(request, exception):
     return text(f"Too naive!!! {request.path} is not allowed, baby!")
 
+
 if __name__ == "__main__":
     app.run(**server_settings)
