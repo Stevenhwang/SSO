@@ -14,7 +14,7 @@ class TokenView(HTTPMethodView):
         return json(dict(code=0, msg='清除token成功!'))
 
     async def put(self, request):
-        # 长期token
+        # 设置长期token
         data = request.json
         users = data.get("users")
         exp = 365
