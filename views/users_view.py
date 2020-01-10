@@ -10,7 +10,7 @@ import shortuuid
 class UsersView(HTTPMethodView):
     async def get(self, request):
         users = await User.search(**request.ctx.query)
-        return json(dict(data=[user.to_dict(exclude=['password', 'google_key', 'roles']) for user in users],
+        return json(dict(data=[user.to_dict(exclude=['password', 'roles']) for user in users],
                          count=len(users), code=0, msg="成功"))
 
     async def post(self, request):
@@ -21,13 +21,13 @@ class UsersView(HTTPMethodView):
         eu = await User.filter(Q(name=data['name']) | Q(email=data['email']))
         if eu:
             return json(dict(code=-1, msg='用户名或邮箱有重复！'))
-        password = '7d491c440ba46ca20fde0c5be1377aec' if not data.get('password') else gen_md5(data['password'])
+        password = '25d55ad283aa400af464c76d713c07ad' if not data.get('password') else gen_md5(data['password'])
         mfa = base64.b32encode(bytes(
             str(shortuuid.uuid() + shortuuid.uuid())[:-9], encoding="utf-8")).decode("utf-8")
         data.update(dict(password=password, google_key=mfa))
         nu = User(**data)
         await nu.save()
-        return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：shenshuo'))
+        return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：12345678'))
 
 
 class UserView(HTTPMethodView):
