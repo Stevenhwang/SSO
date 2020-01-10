@@ -4,6 +4,7 @@ from models.admin import SysLog
 
 
 class LogsView(HTTPMethodView):
+    # 系统日志查询接口
     async def get(self, request):
         logs = await SysLog.search(**request.ctx.query)
         return json(dict(data=[log.to_dict(exclude=['updated_at']) for log in logs],
