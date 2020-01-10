@@ -3,10 +3,10 @@ from sanic import Blueprint
 from models.admin import User, Role
 import re
 
-auth_check_bp = Blueprint('auth_check', url_prefix='/authcheck', version=2)
+gateway_bp = Blueprint('gateway', version=2)
 
 
-@auth_check_bp.route('/')
+@gateway_bp.route('/auth_check')
 async def auth_check(request):
     args = eval(str(request.args).replace('[', '').replace(']', ''))
     uid = args.get('uid')

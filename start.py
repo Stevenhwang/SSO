@@ -5,7 +5,7 @@ from settings import server_settings, db_settings
 from blueprints import api
 import aioredis
 from settings import redis_settings
-from tasks.log_sub import log_sub
+# from tasks.log_sub import log_sub
 
 logging.basicConfig(level=logging.DEBUG)
 app = Sanic(name='admin')
@@ -56,10 +56,10 @@ async def init_redis_pool(app, loop):
 
 # 订阅redis日志任务(是否废弃？)
 # FIXME
-@app.listener('after_server_start')
-async def sub_redis_log(app, loop):
-    channel, = await app.redis.subscribe('ops_log')
-    app.add_task(log_sub(channel))
+# @app.listener('after_server_start')
+# async def sub_redis_log(app, loop):
+#     channel, = await app.redis.subscribe('ops_log')
+#     app.add_task(log_sub(channel))
 
 
 # 关闭redis连接池
