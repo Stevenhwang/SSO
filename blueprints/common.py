@@ -3,7 +3,7 @@ from sanic.response import json
 from routers import routers
 from utils.jwt_token import AuthToken
 
-common_bp = Blueprint('common', url_prefix='/', version=2)
+common_bp = Blueprint('common', version=2)
 
 for router in routers:
     common_bp.add_route(*router)
