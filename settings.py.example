@@ -29,7 +29,9 @@ redis_settings = {
     'REDIS_HOST': '192.168.183.135',
     'REDIS_PORT': '6379',
     'REDIS_PASS': 'cWCVKJ7ZHUK12mVbivUf',
-    'REDIS_DB': 10
+    'REDIS_DB': 10,
+    'WHITE_URL_KEY': 'white2ywBHMftXQ4Xmymua7JL5Y',
+    'BACKEND_SERVICE_KEY': 'backYGvJsdsgh69gowQGe7VrVH'
 }
 
 jwt_settings = {

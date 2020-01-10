@@ -6,6 +6,7 @@ from views.functions_view import FunctionsView, FunctionView
 from views.auth_view import AuthView
 from views.token_view import TokenView
 from views.logs_view import LogsView
+from views.white_url_view import WhiteUrlView
 
 routers = [
     (UsersView.as_view(), '/users'),
@@ -21,5 +22,6 @@ routers = [
     (FunctionView.as_view(), '/function/<fid:int>'),
     (AuthView.as_view(), '/auth'),
     (TokenView.as_view(), '/token'),
-    (LogsView.as_view(), '/logs')
+    (LogsView.as_view(), '/logs'),
+    (WhiteUrlView.as_view(), '/white_url')
 ]
