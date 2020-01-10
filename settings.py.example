@@ -1,15 +1,28 @@
 server_settings = {
-    'SERVER_HOST': '0.0.0.0',
-    'SERVER_PORT': 8000,
-    'SERVER_DEBUG': True
+    'host': '0.0.0.0',
+    'port': 8000,
+    'debug': True
 }
 
-db_settings = {
-    'DB_HOST': '192.168.183.135',
-    'DB_PORT': '3306',
-    'DB_NAME': 'xops-sso',
-    'DB_USER': 'root',
-    'DB_PASS': '6s?f!hgGeWsg123qwe'
+db_config = {
+    'connections': {
+        'default': {
+            'engine': 'tortoise.backends.mysql',
+            'credentials': {
+                'host': '192.168.183.135',
+                'port': '3306',
+                'user': 'root',
+                'password': '6s?f!hgGeWsg123qwe',
+                'database': 'xops-sso'
+            }
+        }
+    },
+    'apps': {
+        'models': {
+            'models': ["models.admin"],
+            'default_connection': 'default',
+        }
+    }
 }
 
 redis_settings = {
