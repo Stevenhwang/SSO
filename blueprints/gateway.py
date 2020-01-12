@@ -25,7 +25,7 @@ async def auth_check(request):
         return text("false")
 
 
-@gateway_bp.route('/log')
+@gateway_bp.route('/log', methods=['POST'])
 async def upload_log(request):
     # 网关上传日志接口
     data = request.json
