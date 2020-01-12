@@ -27,7 +27,7 @@ class UsersView(HTTPMethodView):
         data.update(dict(password=password, google_key=mfa))
         nu = User(**data)
         await nu.save()
-        return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}密码为：12345678'))
+        return json(dict(code=0, msg=f'如果没填写密码则新用户{nu.name}默认密码为：12345678'))
 
 
 class UserView(HTTPMethodView):
