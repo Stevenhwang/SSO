@@ -1,6 +1,6 @@
 from sanic import Sanic
 from sanic.response import text
-from sanic.exceptions import NotFound
+from sanic.exceptions import NotFound, MethodNotSupported
 import logging
 from tortoise.contrib.sanic import register_tortoise
 from settings import server_settings, db_config
@@ -35,9 +35,9 @@ async def close_redis_pool(app, loop):
     await app.redis.wait_closed()
 
 
-@app.exception(NotFound)
+@app.exception(NotFound, MethodNotSupported)
 async def ignore_404s(request, exception):
-    return text(f"Too naive!!! {request.path} is not allowed, baby!")
+    return text(f"Too naive!!! {request.method} {request.path} is not allowed, baby!")
 
 
 if __name__ == "__main__":
