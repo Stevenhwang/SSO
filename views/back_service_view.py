@@ -25,7 +25,7 @@ class BackServiceView(HTTPMethodView):
             return json(dict(code=-1, msg='参数不能为空'))
 
         await request.app.redis.hset(BackServiceView.bs_key,
-                                     bs_end_point, ujson.loads(dict(name=bs_name, url=bs_url)))
+                                     bs_end_point, ujson.dumps(dict(name=bs_name, url=bs_url)))
         return json(dict(code=0, msg='创建成功'))
 
     async def delete(self, request):
