@@ -52,6 +52,21 @@ traits:
 /login:
   post:
     description: 登陆
+    body:
+      application/json:
+        properties:
+          username:
+            type: string
+            required: true
+            description: 用户名
+          password:
+            type: string
+            required: true
+            description: 密码
+          dynamic:
+            type: string
+            required: false
+            description: google二次验证码
 /logout:
   post:
     is: [hasHeaders]
