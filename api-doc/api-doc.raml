@@ -156,6 +156,38 @@ traits:
             type: string
             required: true
             description: 请求uri
+/services:
+  get:
+    is: [hasHeaders]
+    description: 获取后端服务列表
+  post:
+    is: [hasHeaders]
+    description: 新增后端服务
+    body:
+      application/json:
+        properties:
+          bs_name:
+            type: string
+            required: true
+            description: 后端服务名
+          bs_url:
+            type: string
+            required: true
+            description: 服务地址
+          bs_end_point:
+            type: string
+            required: true
+            description: 访问端点
+  delete:
+    is: [hasHeaders]
+    description: 删除后端服务
+    body:
+      application/json:
+        properties:
+          bs_end_point:
+            type: string
+            required: true
+            description: 访问端点
 /roles:
   get:
     is: [hasHeaders, queryCommon]

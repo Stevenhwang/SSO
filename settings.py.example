@@ -31,7 +31,7 @@ redis_settings = {
     'REDIS_PASS': 'cWCVKJ7ZHUK12mVbivUf',
     'REDIS_DB': 10,
     'WHITE_URL_KEY': 'white2ywBHMftXQ4Xmymua7JL5Y',
-    'BACKEND_SERVICE_KEY': 'backYGvJsdsgh69gowQGe7VrVH'
+    'BACK_SERVICE_KEY': 'backYGvJsdsgh69gowQGe7VrVH'
 }
 
 jwt_settings = {
