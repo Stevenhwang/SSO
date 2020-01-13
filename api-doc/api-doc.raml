@@ -64,6 +64,23 @@ traits:
   get:
     is: [hasHeaders, queryCommon]
     description: 网关日志查询接口
+/token:
+  post:
+    is: [hasHeaders]
+    description: 清除token
+  put:
+    is: [hasHeaders]
+    description: 设置长期token
+/white_url:
+  get:
+    is: [hasHeaders]
+    description: 获取网关白名单列表
+  post:
+    is: [hasHeaders]
+    description: 新增网关白名单
+  delete:
+    is: [hasHeaders]
+    description: 删除白名单
 /roles:
   get:
     is: [hasHeaders, queryCommon]
@@ -222,3 +239,9 @@ traits:
     delete:
       is: [hasHeaders]
       description: 删除路由权限
+/auth_check:
+  get:
+    description: 网关查询权限接口
+/log:
+  post:
+    description: 网关上传日志接口
