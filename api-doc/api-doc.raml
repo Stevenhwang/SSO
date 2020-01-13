@@ -45,6 +45,42 @@ traits:
         description: 默认15条记录
         type: integer
         required: false
+/auth:
+  get:
+    is: [hasHeaders]
+    description: 前端携带token查询用户的菜单和组件
+/login:
+  post:
+    description: 登陆
+/logout:
+  post:
+    is: [hasHeaders]
+    description: 登出
+/reset_pw:
+  post:
+    is: [hasHeaders]
+    description: 重置密码
+/logs:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 网关日志查询接口
+/roles:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 获取角色列表
+  post:
+    is: [hasHeaders]
+    description: 新建角色
+  /{roleId}:
+    post:
+      is: [hasHeaders]
+      description: 给角色分配资源
+    put:
+      is: [hasHeaders]
+      description: 更新角色信息
+    delete:
+      is: [hasHeaders]
+      description: 删除角色
 /users:
   get:
     is: [hasHeaders, queryCommon]
@@ -144,10 +180,6 @@ traits:
     delete:
       is: [hasHeaders]
       description: 删除用户
-/auth:
-  get:
-    is: [hasHeaders]
-    description: 前端携带token查询用户的菜单和组件
 /components:
   get:
     is: [hasHeaders, queryCommon]

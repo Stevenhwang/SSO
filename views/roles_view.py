@@ -44,7 +44,7 @@ class RoleView(HTTPMethodView):
         for k, v in data.items():
             setattr(r, k, v)
         await r.save()
-        return json(dict(code=0, msg='编辑成功'))
+        return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, rid):
         r = await Role.get_or_none(id=rid)
@@ -53,17 +53,17 @@ class RoleView(HTTPMethodView):
         await r.delete()
         return json(dict(code=0, msg='删除成功'))
 
-    async def patch(self, request, rid):
-        # 角色启用禁用
-        r = await Role.get_or_none(id=rid)
-        if not r:
-            return json(dict(code=-1, msg='角色不存在'))
-        status = r.status
-        if status:
-            r.status = False
-            await r.save()
-            return json(dict(code=0, msg='角色禁用成功'))
-        else:
-            r.status = True
-            await r.save()
-            return json(dict(code=0, msg='角色启用成功'))
+    # async def patch(self, request, rid):
+    #     # 角色启用禁用
+    #     r = await Role.get_or_none(id=rid)
+    #     if not r:
+    #         return json(dict(code=-1, msg='角色不存在'))
+    #     status = r.status
+    #     if status:
+    #         r.status = False
+    #         await r.save()
+    #         return json(dict(code=0, msg='角色禁用成功'))
+    #     else:
+    #         r.status = True
+    #         await r.save()
+    #         return json(dict(code=0, msg='角色启用成功'))
