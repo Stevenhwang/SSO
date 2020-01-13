@@ -94,13 +94,40 @@ traits:
   get:
     is: [hasHeaders, queryCommon]
     description: 网关日志查询接口
+    queryParameters:
+      method:
+        description: 请求方法
+        type: string
+        required: false
+      uri:
+        description: 请求uri
+        type: string
+        required: false
+      login_ip:
+        description: 来源ip
+        type: string
+        required: false
 /token:
   post:
     is: [hasHeaders]
     description: 清除token
+    body:
+      application/json:
+        properties:
+          users:
+            type: array
+            required: true
+            description: 用户ID列表
   put:
     is: [hasHeaders]
     description: 设置长期token
+    body:
+      application/json:
+        properties:
+          users:
+            type: array
+            required: true
+            description: 用户ID列表
 /white_url:
   get:
     is: [hasHeaders]
