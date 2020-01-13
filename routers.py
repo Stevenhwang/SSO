@@ -1,4 +1,6 @@
-from views.users_view import UsersView, UserView, LogoutView
+from views.users_view import UsersView, UserView
+from views.logout_view import LogoutView
+from views.reset_pw import ResetPWView
 from views.roles_view import RolesView, RoleView
 from views.menus_view import MenusView, MenuView
 from views.components_view import ComponentsView, ComponentView
@@ -10,8 +12,9 @@ from views.white_url_view import WhiteUrlView
 
 routers = [
     (UsersView.as_view(), '/users'),
-    (UserView.as_view(), '/user/<uid:int>'),
+    (UserView.as_view(), '/users/<uid:int>'),
     (LogoutView.as_view(), '/logout'),
+    (ResetPWView.as_view(), '/reset_pw'),
     (RolesView.as_view(), '/roles'),
     (RoleView.as_view(), '/role/<rid:int>'),
     (MenusView.as_view(), '/menus'),
