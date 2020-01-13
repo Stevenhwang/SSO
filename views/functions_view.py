@@ -31,7 +31,7 @@ class FunctionView(HTTPMethodView):
         for k, v in data.items():
             setattr(m, k, v)
         await m.save()
-        return json(dict(code=0, msg='编辑成功'))
+        return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, fid):
         m = await Function.get_or_none(id=fid)
@@ -40,17 +40,17 @@ class FunctionView(HTTPMethodView):
         await m.delete()
         return json(dict(code=0, msg='删除成功'))
 
-    async def patch(self, request, fid):
-        # 权限启用禁用
-        m = await Function.get_or_none(id=fid)
-        if not m:
-            return json(dict(code=-1, msg='权限不存在'))
-        status = m.status
-        if status:
-            m.status = False
-            await m.save()
-            return json(dict(code=0, msg='权限禁用成功'))
-        else:
-            m.status = True
-            await m.save()
-            return json(dict(code=0, msg='权限启用成功'))
+    # async def patch(self, request, fid):
+    #     # 权限启用禁用
+    #     m = await Function.get_or_none(id=fid)
+    #     if not m:
+    #         return json(dict(code=-1, msg='权限不存在'))
+    #     status = m.status
+    #     if status:
+    #         m.status = False
+    #         await m.save()
+    #         return json(dict(code=0, msg='权限禁用成功'))
+    #     else:
+    #         m.status = True
+    #         await m.save()
+    #         return json(dict(code=0, msg='权限启用成功'))

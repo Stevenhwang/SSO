@@ -30,7 +30,7 @@ class MenuView(HTTPMethodView):
         for k, v in data.items():
             setattr(m, k, v)
         await m.save()
-        return json(dict(code=0, msg='编辑成功'))
+        return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, mid):
         m = await Menu.get_or_none(id=mid)
@@ -39,17 +39,17 @@ class MenuView(HTTPMethodView):
         await m.delete()
         return json(dict(code=0, msg='删除成功'))
 
-    async def patch(self, request, mid):
-        # 菜单启用禁用
-        m = await Menu.get_or_none(id=mid)
-        if not m:
-            return json(dict(code=-1, msg='菜单不存在'))
-        status = m.status
-        if status:
-            m.status = False
-            await m.save()
-            return json(dict(code=0, msg='菜单禁用成功'))
-        else:
-            m.status = True
-            await m.save()
-            return json(dict(code=0, msg='菜单启用成功'))
+    # async def patch(self, request, mid):
+    #     # 菜单启用禁用
+    #     m = await Menu.get_or_none(id=mid)
+    #     if not m:
+    #         return json(dict(code=-1, msg='菜单不存在'))
+    #     status = m.status
+    #     if status:
+    #         m.status = False
+    #         await m.save()
+    #         return json(dict(code=0, msg='菜单禁用成功'))
+    #     else:
+    #         m.status = True
+    #         await m.save()
+    #         return json(dict(code=0, msg='菜单启用成功'))

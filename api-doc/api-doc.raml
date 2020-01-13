@@ -162,3 +162,31 @@ traits:
     delete:
       is: [hasHeaders]
       description: 删除前端组件
+/menus:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 获取前端菜单列表
+  post:
+    is: [hasHeaders]
+    description: 新建前端菜单
+  /{menuId}:
+    put:
+      is: [hasHeaders]
+      description: 更新前端菜单
+    delete:
+      is: [hasHeaders]
+      description: 删除前端菜单
+/functions:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 获取路由权限列表
+  post:
+    is: [hasHeaders]
+    description: 新建路由权限
+  /{functionId}:
+    put:
+      is: [hasHeaders]
+      description: 更新路由权限
+    delete:
+      is: [hasHeaders]
+      description: 删除路由权限
