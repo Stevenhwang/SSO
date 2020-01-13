@@ -144,5 +144,21 @@ traits:
     delete:
       is: [hasHeaders]
       description: 删除用户
-
+/auth:
+  get:
+    is: [hasHeaders]
+    description: 前端携带token查询用户的菜单和组件
+/components:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 获取前端组件列表
+  post:
+    is: [hasHeaders]
+    description: 新建前端组件
+  put:
+    is: [hasHeaders]
+    description: 更新前端组件
+  delete:
+    is: [hasHeaders]
+    description: 删除前端组件
 

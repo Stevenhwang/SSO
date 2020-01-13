@@ -30,7 +30,7 @@ class ComponentView(HTTPMethodView):
         for k, v in data.items():
             setattr(c, k, v)
         await c.save()
-        return json(dict(code=0, msg='编辑成功'))
+        return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, cid):
         c = await Component.get_or_none(id=cid)
@@ -38,18 +38,18 @@ class ComponentView(HTTPMethodView):
             return json(dict(code=-1, msg='组件不存在'))
         await c.delete()
         return json(dict(code=0, msg='删除成功'))
-
-    async def patch(self, request, cid):
-        # 组件启用禁用
-        c = await Component.get_or_none(id=cid)
-        if not c:
-            return json(dict(code=-1, msg='组件不存在'))
-        status = c.status
-        if status:
-            c.status = False
-            await c.save()
-            return json(dict(code=0, msg='组件禁用成功'))
-        else:
-            c.status = True
-            await c.save()
-            return json(dict(code=0, msg='组件启用成功'))
+    #
+    # async def patch(self, request, cid):
+    #     # 组件启用禁用
+    #     c = await Component.get_or_none(id=cid)
+    #     if not c:
+    #         return json(dict(code=-1, msg='组件不存在'))
+    #     status = c.status
+    #     if status:
+    #         c.status = False
+    #         await c.save()
+    #         return json(dict(code=0, msg='组件禁用成功'))
+    #     else:
+    #         c.status = True
+    #         await c.save()
+    #         return json(dict(code=0, msg='组件启用成功'))
