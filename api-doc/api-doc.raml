@@ -75,6 +75,21 @@ traits:
   post:
     is: [hasHeaders]
     description: 用户重置密码
+    body:
+      application/json:
+        properties:
+          old_password:
+            type: string
+            required: true
+            description: 老密码
+          new_password1:
+            type: string
+            required: true
+            description: 新密码
+          new_password2:
+            type: string
+            required: true
+            description: 新密码
 /logs:
   get:
     is: [hasHeaders, queryCommon]
