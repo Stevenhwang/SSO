@@ -59,7 +59,7 @@ traits:
 /reset_pw:
   post:
     is: [hasHeaders]
-    description: 重置密码
+    description: 用户重置密码
 /logs:
   get:
     is: [hasHeaders, queryCommon]
@@ -74,7 +74,7 @@ traits:
   /{roleId}:
     post:
       is: [hasHeaders]
-      description: 给角色分配资源
+      description: 给角色分配资源(users, components, functions, menus)
     put:
       is: [hasHeaders]
       description: 更新角色信息
