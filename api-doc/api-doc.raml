@@ -223,6 +223,10 @@ traits:
             type: string
             required: true
             description: 角色名称
+          status:
+            type: boolean
+            required: false
+            description: 是否启用
   /{roleId}:
     post:
       is: [hasHeaders]
@@ -362,9 +366,33 @@ traits:
   get:
     is: [hasHeaders, queryCommon]
     description: 获取前端组件列表
+    queryParameters:
+      remark:
+        type: string
+        required: false
+        description: 组件备注
+      status:
+        type: boolean
+        required: false
+        description: 是否启用
   post:
     is: [hasHeaders]
     description: 新建前端组件
+    body:
+      application/json:
+        properties:
+          name:
+            type: string
+            required: true
+            description: 组件名称
+          remark:
+            type: string
+            required: false
+            description: 组件备注
+          status:
+            type: boolean
+            required: false
+            description: 是否启用
   /{componentId}:
     put:
       is: [hasHeaders]
@@ -376,9 +404,33 @@ traits:
   get:
     is: [hasHeaders, queryCommon]
     description: 获取前端菜单列表
+    queryParameters:
+      remark:
+        type: string
+        required: false
+        description: 菜单备注
+      status:
+        type: boolean
+        required: false
+        description: 是否启用
   post:
     is: [hasHeaders]
     description: 新建前端菜单
+    body:
+      application/json:
+        properties:
+          name:
+            type: string
+            required: true
+            description: 菜单名称
+          remark:
+            type: string
+            required: false
+            description: 菜单备注
+          status:
+            type: boolean
+            required: false
+            description: 是否启用
   /{menuId}:
     put:
       is: [hasHeaders]
@@ -390,9 +442,41 @@ traits:
   get:
     is: [hasHeaders, queryCommon]
     description: 获取路由权限列表
+    queryParameters:
+      uri:
+        type: string
+        required: false
+        description: 路由权限uri
+      method_type:
+        type: string
+        required: false
+        description: 请求方法
+      status:
+        type: boolean
+        required: false
+        description: 是否启用
   post:
     is: [hasHeaders]
     description: 新建路由权限
+    body:
+      application/json:
+        properties:
+          name:
+            type: string
+            required: true
+            description: 路由权限名称
+          uri:
+            type: string
+            required: true
+            description: 路由权限uri
+          method_type:
+            type: string
+            required: true
+            description: 请求方法
+          status:
+            type: boolean
+            required: false
+            description: 是否启用
   /{functionId}:
     put:
       is: [hasHeaders]
