@@ -42,6 +42,10 @@ class RoleView(HTTPMethodView):
         if not r:
             return json(dict(code=-1, msg='角色不存在'))
         for k, v in data.items():
+            if k == 'name':
+                er = await Role.get_or_none(name=v)
+                if er and r.name != v:
+                    return json(dict(code=-1, msg='此角色已注册！'))
             setattr(r, k, v)
         await r.save()
         return json(dict(code=0, msg='更新成功'))

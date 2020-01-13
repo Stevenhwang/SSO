@@ -151,25 +151,83 @@ traits:
     description: 删除网关白名单
     body:
       application/json:
-          properties:
-            request_uri:
-              type: string
-              required: true
-              description: 请求uri
+        properties:
+          request_uri:
+            type: string
+            required: true
+            description: 请求uri
 /roles:
   get:
     is: [hasHeaders, queryCommon]
     description: 获取角色列表
+    queryParameters:
+      status:
+        description: 是否启用
+        type: boolean
+        required: false
+      users:
+        description: 用户ID
+        type: integer
+        required: false
+      components:
+        description: 组件ID
+        type: integer
+        required: false
+      menus:
+        description: 菜单ID
+        type: integer
+        required: false
+      functions:
+        description: 路由权限ID
+        type: integer
+        required: false
   post:
     is: [hasHeaders]
     description: 新建角色
+    body:
+      application/json:
+        properties:
+          name:
+            type: string
+            required: true
+            description: 角色名称
   /{roleId}:
     post:
       is: [hasHeaders]
       description: 给角色分配资源(users, components, functions, menus)
+      body:
+        application/json:
+          properties:
+            users:
+              type: array
+              required: false
+              description: 用户ID列表
+            components:
+              description: 组件ID列表
+              type: array
+              required: false
+            menus:
+              description: 菜单ID列表
+              type: array
+              required: false
+            functions:
+              description: 路由权限ID列表
+              type: array
+              required: false
     put:
       is: [hasHeaders]
       description: 更新角色信息
+      body:
+        application/json:
+          properties:
+            name:
+              type: string
+              required: false
+              description: 角色名称
+            status:
+              type: boolean
+              required: false
+              description: 状态
     delete:
       is: [hasHeaders]
       description: 删除角色
@@ -213,10 +271,6 @@ traits:
       last_login_time:
         description: 上次登陆时间
         type: string
-        required: false
-      roles:
-        description: 角色
-        type: integer
         required: false
     responses:
       200:
