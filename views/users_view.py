@@ -37,9 +37,20 @@ class UserView(HTTPMethodView):
         if not u:
             return json(dict(code=-1, msg='用户不存在'))
         for k, v in data.items():
+            if k in ['name', 'email']:
+                eu = await User.filter(Q(name=v) | Q(email=v))
+                if eu and (u.name != v or u.email != v):
+                    return json(dict(code=-1, msg='用户名或邮箱有重复！'))
+            if k == 'status':
+                await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+            if k == 'google_key':
+                v = base64.b32encode(bytes(
+                    str(shortuuid.uuid() + shortuuid.uuid())[:-9], encoding="utf-8")).decode("utf-8") if v else ''
+            if k == 'password':
+                v = gen_md5(v) if v else u.password
             setattr(u, k, v)
         await u.save()
-        return json(dict(code=0, msg='编辑成功'))
+        return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, uid):
         u = await User.get_or_none(id=uid)
@@ -48,50 +59,20 @@ class UserView(HTTPMethodView):
         await u.delete()
         return json(dict(code=0, msg='删除成功'))
 
-    async def patch(self, request, uid):
-        # 用户启用禁用
-        u = await User.get_or_none(id=uid)
-        if not u:
-            return json(dict(code=-1, msg='用户不存在'))
-        status = u.status
-        if u.is_super:
-            return json(dict(code=-2, msg='系统管理员用户无法禁用!'))
-        if status:
-            u.status = False
-            await u.save()
-            await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
-            return json(dict(code=0, msg='用户禁用成功'))
-        else:
-            u.status = True
-            await u.save()
-            return json(dict(code=0, msg='用户启用成功'))
-
-
-class LogoutView(HTTPMethodView):
-    async def post(self, request):
-        # 登出
-        uid = request.ctx.user_id
-        await request.app.redis.execute('delete', f"uid_{uid}_auth_token")
-        return json(dict(code=0, msg='注销成功'))
-
-    async def put(self, request):
-        # 用户重置密码
-        data = request.json
-        old_password = data.get('old_password')
-        new_password1 = data.get('new_password1')
-        new_password2 = data.get('new_password2')
-        uid = request.ctx.user_id
-
-        if not old_password or not new_password1 or not new_password2:
-            return json(dict(code=-1, msg='不能有空值'))
-
-        if new_password1 != new_password2:
-            return json(dict(code=-2, msg='两个新密码输入不一致'))
-
-        user = await User.get(id=uid)
-        if user.password != gen_md5(old_password):
-            return json(dict(code=-3, msg='密码错误'))
-        user.password = gen_md5(new_password1)
-        await user.save()
-
-        return json(dict(code=0, msg='修改密码成功'))
+    # async def patch(self, request, uid):
+    #     # 用户启用禁用
+    #     u = await User.get_or_none(id=uid)
+    #     if not u:
+    #         return json(dict(code=-1, msg='用户不存在'))
+    #     status = u.status
+    #     if u.is_super:
+    #         return json(dict(code=-2, msg='系统管理员用户无法禁用!'))
+    #     if status:
+    #         u.status = False
+    #         await u.save()
+    #         await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+    #         return json(dict(code=0, msg='用户禁用成功'))
+    #     else:
+    #         u.status = True
+    #         await u.save()
+    #         return json(dict(code=0, msg='用户启用成功'))

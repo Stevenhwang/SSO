@@ -1,0 +1,148 @@
+#%RAML 1.0
+---
+title: SSO
+baseUri: http://192.168.183.128:8000/api/{version}
+version: v2
+description: SSO系统api文档
+traits:
+  hasHeaders:
+    headers:
+      Auth-Token:
+        description: Json Web Token 认证
+        type: string
+        required: true
+  queryCommon:
+    queryParameters:
+      search:
+        description: 模糊搜索和批量搜索(批量搜索用逗号分隔)
+        type: string
+        required: false
+      id:
+        description: id
+        type: integer
+        required: false
+      name:
+        description: name
+        type: string
+        required: false
+      created_at:
+        description: 创建时间
+        type: string
+        required: false
+      updated_at:
+        description: 更新时间
+        type: string
+        required: false
+      order_by:
+        description: 排序(以上字段都可排序，默认为id，如需倒序，前加负号)
+        type: string
+        required: false
+      page:
+        description: 默认第1页
+        type: integer
+        required: false
+      limit:
+        description: 默认15条记录
+        type: integer
+        required: false
+/users:
+  get:
+    is: [hasHeaders, queryCommon]
+    description: 获取用户列表
+    queryParameters:
+      email:
+        description: 邮箱
+        type: string
+        required: false
+      tel:
+        description: 电话号码
+        type: string
+        required: false
+      no:
+        description: 工号
+        type: string
+        required: false
+      deparment:
+        description: 部门
+        type: string
+        required: false
+      google_key:
+        description: google二次验证mfa
+        type: string
+        required: false
+      is_super:
+        description: 是否管理员
+        type: boolean
+        required: false
+      status:
+        description: 是否启用
+        type: boolean
+        required: false
+      last_login_ip:
+        description: 上次登陆ip
+        type: string
+        required: false
+      last_login_time:
+        description: 上次登陆时间
+        type: string
+        required: false
+      roles:
+        description: 角色
+        type: integer
+        required: false
+    responses:
+      200:
+        body:
+         application/json:
+          example: |
+            {
+              "data":[{"email":"zed@itcom888.com","google_key":"","tel":null,"last_login_time":"2020-01-10 18:39:17.279296","created_at":"2020-01-09 15:26:32.250210","status":1,"no":null,"is_super":1,"last_login_ip":"127.0.0.1","updated_at":"2020-01-10 18:39:17.279321","name":"caden","id":1,"department":null}],
+              "count": 1,
+              "code": 0,
+              "msg": "成功"
+            }
+  post:
+    is: [hasHeaders]
+    description: 创建用户
+    body:
+      application/json:
+        properties:
+          name:
+            description: 用户名
+            type: string
+            required: true
+          email:
+            description: 邮箱
+            type: string
+            required: true
+          password:
+            default: 12345678
+            description: 密码
+            type: string
+            required: false
+          tel:
+            description: 电话号码
+            type: string
+            required: false
+          no:
+            description: 工号
+            type: string
+            required: false
+          deparment:
+            description: 部门
+            type: string
+            required: false
+          status:
+            default: false
+            description: 是否启用
+            type: boolean
+            required: false
+  /{userId}:
+    put:
+      is: [hasHeaders]
+      description: 更新用户信息
+    delete:
+      is: [hasHeaders]
+      description: 删除用户
+
+
