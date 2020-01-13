@@ -155,10 +155,10 @@ traits:
   post:
     is: [hasHeaders]
     description: 新建前端组件
-  put:
-    is: [hasHeaders]
-    description: 更新前端组件
-  delete:
-    is: [hasHeaders]
-    description: 删除前端组件
-
+  /{componentId}:
+    put:
+      is: [hasHeaders]
+      description: 更新前端组件
+    delete:
+      is: [hasHeaders]
+      description: 删除前端组件
