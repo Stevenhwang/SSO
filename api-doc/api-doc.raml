@@ -135,9 +135,27 @@ traits:
   post:
     is: [hasHeaders]
     description: 新增网关白名单
+    body:
+      application/json:
+        properties:
+          request_uri:
+            type: string
+            required: true
+            description: 请求uri
+          real_uri:
+            type: string
+            required: true
+            description: 真实后端uri
   delete:
     is: [hasHeaders]
-    description: 删除白名单
+    description: 删除网关白名单
+    body:
+      application/json:
+          properties:
+            request_uri:
+              type: string
+              required: true
+              description: 请求uri
 /roles:
   get:
     is: [hasHeaders, queryCommon]
