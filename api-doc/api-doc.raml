@@ -363,6 +363,11 @@ traits:
             description: 是否启用
             type: boolean
             required: false
+          is_super:
+            default: false
+            description: 是否设置为管理员
+            type: boolean
+            required: false
   /{userId}:
     put:
       is: [hasHeaders]
