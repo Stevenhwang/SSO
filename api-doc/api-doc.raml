@@ -108,6 +108,14 @@ traits:
         type: string
         required: false
 /token:
+  get:
+    is: [hasHeaders]
+    description: 查看用户token过期时间
+    queryParameters:
+      uid:
+        description: 用户ID
+        type: integer
+        required: true
   post:
     is: [hasHeaders]
     description: 清除token

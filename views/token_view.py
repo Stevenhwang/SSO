@@ -3,6 +3,13 @@ from sanic.views import HTTPMethodView
 
 
 class TokenView(HTTPMethodView):
+    async def get(self, request):
+        # 查看用户token过期时间
+        args = request.ctx.query
+        uid = args.get('uid')
+        ttl = await request.app.redis.execute('ttl', f"uid_{uid}_auth_token")
+        return json(dict(code=0, msg=f'Token过期时间为{ttl}'))
+
     async def post(self, request):
         # 清除token
         data = request.json
