@@ -39,7 +39,7 @@ async def close_redis_pool(app, loop):
 async def ignore_404s(request, exception):
     return text(f"Too naive!!! {request.method} {request.path} is not allowed, baby!")
 
-app.static('/api-doc', './api-doc/api-doc.html', content_type="text/html; charset=utf-8")
+app.static('/v2/api-doc/', './api-doc/api-doc.html', content_type="text/html; charset=utf-8")
 
 if __name__ == "__main__":
     app.run(**server_settings)
