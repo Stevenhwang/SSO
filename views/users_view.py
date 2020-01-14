@@ -36,6 +36,9 @@ class UserView(HTTPMethodView):
         u = await User.get_or_none(id=uid)
         if not u:
             return json(dict(code=-1, msg='用户不存在'))
+        for f in ['name', 'email']:
+            if f not in data.keys():
+                return json(dict(code=-1, msg='关键参数不能为空'))
         for k, v in data.items():
             if k in ['name', 'email']:
                 eu = await User.filter(Q(name=v) | Q(email=v))
