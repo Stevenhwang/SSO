@@ -59,6 +59,6 @@ class UserView(HTTPMethodView):
         u = await User.get_or_none(id=uid)
         if not u:
             return json(dict(code=-1, msg='用户不存在'))
-        await u.delete()
         await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 删除用户的同时清除掉他的token
+        await u.delete()
         return json(dict(code=0, msg='删除成功'))
