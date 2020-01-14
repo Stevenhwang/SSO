@@ -42,7 +42,7 @@ class UserView(HTTPMethodView):
                 if eu and (u.name != v or u.email != v):
                     return json(dict(code=-1, msg='用户名或邮箱有重复！'))
             if k == 'status':
-                await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+                await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
             if k == 'google_key':
                 v = base64.b32encode(bytes(
                     str(shortuuid.uuid() + shortuuid.uuid())[:-9], encoding="utf-8")).decode("utf-8") if v else ''
