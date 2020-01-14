@@ -40,10 +40,14 @@ class UserView(HTTPMethodView):
             if f not in data.keys():
                 return json(dict(code=-1, msg='关键参数不能为空'))
         for k, v in data.items():
-            if k in ['name', 'email']:
-                eu = await User.filter(Q(name=v) | Q(email=v))
-                if eu and (u.name != v or u.email != v):
-                    return json(dict(code=-1, msg='用户名或邮箱有重复！'))
+            if k == 'name':
+                eu = await User.get_or_none(name=v)
+                if eu and u.name != v:
+                    return json(dict(code=-1, msg='用户名有重复！'))
+            if k == 'email':
+                eu = await User.get_or_none(email=v)
+                if eu and u.email != v:
+                    return json(dict(code=-1, msg='邮箱有重复！'))
             if k == 'status':
                 await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
             if k == 'google_key':
