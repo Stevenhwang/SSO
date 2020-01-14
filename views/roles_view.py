@@ -56,18 +56,3 @@ class RoleView(HTTPMethodView):
             return json(dict(code=-1, msg='角色不存在'))
         await r.delete()
         return json(dict(code=0, msg='删除成功'))
-
-    # async def patch(self, request, rid):
-    #     # 角色启用禁用
-    #     r = await Role.get_or_none(id=rid)
-    #     if not r:
-    #         return json(dict(code=-1, msg='角色不存在'))
-    #     status = r.status
-    #     if status:
-    #         r.status = False
-    #         await r.save()
-    #         return json(dict(code=0, msg='角色禁用成功'))
-    #     else:
-    #         r.status = True
-    #         await r.save()
-    #         return json(dict(code=0, msg='角色启用成功'))
