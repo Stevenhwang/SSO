@@ -58,21 +58,3 @@ class UserView(HTTPMethodView):
             return json(dict(code=-1, msg='用户不存在'))
         await u.delete()
         return json(dict(code=0, msg='删除成功'))
-
-    # async def patch(self, request, uid):
-    #     # 用户启用禁用
-    #     u = await User.get_or_none(id=uid)
-    #     if not u:
-    #         return json(dict(code=-1, msg='用户不存在'))
-    #     status = u.status
-    #     if u.is_super:
-    #         return json(dict(code=-2, msg='系统管理员用户无法禁用!'))
-    #     if status:
-    #         u.status = False
-    #         await u.save()
-    #         await request.app.redis.execute('delete', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
-    #         return json(dict(code=0, msg='用户禁用成功'))
-    #     else:
-    #         u.status = True
-    #         await u.save()
-    #         return json(dict(code=0, msg='用户启用成功'))
