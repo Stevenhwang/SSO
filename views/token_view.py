@@ -7,8 +7,12 @@ class TokenView(HTTPMethodView):
         # 查看用户token过期时间
         args = request.ctx.query
         uid = args.get('uid')
-        ttl = await request.app.redis.execute('ttl', f"uid_{uid}_auth_token")
-        return json(dict(code=0, msg=f'Token过期时间为{ttl}'))
+        u = await request.app.redis.get(f"uid_{uid}_auth_token")
+        if not u:
+            return json(dict(code=0, msg='用户未登录!'))
+        else:
+            ttl = await request.app.redis.execute('ttl', f"uid_{uid}_auth_token")
+            return json(dict(code=0, msg=f'Token过期时间为{ttl}'))
 
     async def post(self, request):
         # 清除token
