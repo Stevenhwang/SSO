@@ -52,4 +52,5 @@ async def login(request):
         user.last_login_ip = login_ip_list.split(",")[0]
     user.last_login_time = datetime.now()
     await user.save()
-    return json(dict(code=0, auth_token=auth_token.decode(), username=user.name, msg='登录成功'))
+    return json(dict(code=0, auth_token=auth_token.decode(), username=user.name,
+                     msg='登录成功', is_super=user.is_super))
