@@ -17,7 +17,6 @@ class TokenView(HTTPMethodView):
         # 设置长期token
         data = request.json
         users = data.get("users")
-        exp = 365
         for uid in users:
-            await request.app.redis.execute('expire', f"uid_{uid}_auth_token", 86400 * exp)
+            await request.app.redis.execute('persist', f"uid_{uid}_auth_token")
         return json(dict(code=0, msg='设置长期token成功!'))
