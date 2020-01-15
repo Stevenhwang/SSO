@@ -12,7 +12,10 @@ class TokenView(HTTPMethodView):
             return json(dict(code=0, msg='用户未登录!'))
         else:
             ttl = await request.app.redis.execute('ttl', f"uid_{uid}_auth_token")
-            return json(dict(code=0, msg=f'Token过期时间为{ttl}'))
+            if ttl > 0:
+                return json(dict(code=0, msg=f'Token过期时间为{ttl}秒!'))
+            else:
+                return json(dict(code=0, msg=f'长期Token!'))
 
     async def post(self, request):
         # 清除token
