@@ -49,10 +49,9 @@ class BaseModel(Model):
             if isinstance(fs_map.get(k.split('__')[0]), fields.DatetimeField):
                 query[k] = ciso8601.parse_datetime(v)
         if search:
-            search_list = search.split(',')
             query.pop('search')
-            if len(search_list) > 1:
-                attr_dict_list = [{a + '__in': search_list} for a in attributes]
+            if isinstance(search, list):
+                attr_dict_list = [{a + '__in': search} for a in attributes]
             else:
                 attr_dict_list = [{a + '__icontains': search} for a in attributes]
             q_list = [Q(**a) for a in attr_dict_list]
