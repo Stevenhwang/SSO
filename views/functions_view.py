@@ -35,7 +35,7 @@ class FunctionView(HTTPMethodView):
             if k == 'name':
                 ef = await Function.get_or_none(name=v)
                 if ef and f.name != v:
-                    return json(dict(code=-1, msg='名称有重复！'))
+                    return json(dict(code=-1, msg='权限名称有重复！'))
             setattr(f, k, v)
         await f.save()
         return json(dict(code=0, msg='更新成功'))

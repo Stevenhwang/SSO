@@ -41,6 +41,8 @@ class RoleView(HTTPMethodView):
         r = await Role.get_or_none(id=rid)
         if not r:
             return json(dict(code=-1, msg='角色不存在'))
+        if not data.get('name'):
+            return json(dict(code=-1, msg='关键参数不能为空'))
         for k, v in data.items():
             if k == 'name':
                 er = await Role.get_or_none(name=v)
