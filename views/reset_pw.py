@@ -24,5 +24,5 @@ class ResetPWView(HTTPMethodView):
             return json(dict(code=-3, msg='密码错误'))
         user.password = gen_md5(new_password1)
         await user.save()
-
+        await request.app.redis.execute('del', f"uid_{uid}_auth_token")  # 清除token
         return json(dict(code=0, msg='修改密码成功'))

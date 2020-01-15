@@ -49,12 +49,13 @@ class UserView(HTTPMethodView):
                 if eu and u.email != v:
                     return json(dict(code=-1, msg='邮箱有重复！'))
             if k == 'status':
-                await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 禁用用户的同时清除掉他的token
+                await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 清除token
             if k == 'google_key':
                 v = base64.b32encode(bytes(str(shortuuid.uuid() + shortuuid.uuid())[:-9],
                                            encoding="utf-8")).decode("utf-8") if v else ''
             if k == 'password':
                 v = gen_md5(v) if v else u.password
+                await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 清除token
             setattr(u, k, v)
         await u.save()
         return json(dict(code=0, msg='更新成功'))
@@ -63,6 +64,6 @@ class UserView(HTTPMethodView):
         u = await User.get_or_none(id=uid)
         if not u:
             return json(dict(code=-1, msg='用户不存在'))
-        await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 删除用户的同时清除掉他的token
+        await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 清除token
         await u.delete()
         return json(dict(code=0, msg='删除成功'))
