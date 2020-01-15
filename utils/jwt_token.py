@@ -1,5 +1,6 @@
 import jwt
 from settings import jwt_settings
+from datetime import datetime
 
 
 class AuthToken:
@@ -8,6 +9,7 @@ class AuthToken:
 
     def encode_token(self, **kwargs):
         payload = {
+            'iat': datetime.now(),
             'data': {
                 'user_id': kwargs.get('user_id', ''),
                 'username': kwargs.get('username', ''),
