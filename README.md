@@ -15,10 +15,10 @@ pip install -r requirement.txt
 
 ```bash
 mv settings.py.example settings.py
-python3.7 start.py
+python start.py
 ```
 
 ## API-DOC
 ```bash
-raml2html api-doc.raml > api-doc.html
+cd api-doc && raml2html api-doc.raml > api-doc.html
 ```
