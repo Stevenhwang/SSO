@@ -25,12 +25,19 @@ class FunctionsView(HTTPMethodView):
 class FunctionView(HTTPMethodView):
     async def put(self, request, fid):
         data = request.json
-        m = await Function.get_or_none(id=fid)
-        if not m:
+        f = await Function.get_or_none(id=fid)
+        if not f:
             return json(dict(code=-1, msg='权限不存在'))
+        for i in ['name', 'uri', 'method_type']:
+            if i not in data.keys():
+                return json(dict(code=-1, msg='关键参数不能为空'))
         for k, v in data.items():
-            setattr(m, k, v)
-        await m.save()
+            if k == 'name':
+                ef = await Function.get_or_none(name=v)
+                if ef and f.name != v:
+                    return json(dict(code=-1, msg='名称有重复！'))
+            setattr(f, k, v)
+        await f.save()
         return json(dict(code=0, msg='更新成功'))
 
     async def delete(self, request, fid):
@@ -39,18 +46,3 @@ class FunctionView(HTTPMethodView):
             return json(dict(code=-1, msg='权限不存在'))
         await m.delete()
         return json(dict(code=0, msg='删除成功'))
-
-    # async def patch(self, request, fid):
-    #     # 权限启用禁用
-    #     m = await Function.get_or_none(id=fid)
-    #     if not m:
-    #         return json(dict(code=-1, msg='权限不存在'))
-    #     status = m.status
-    #     if status:
-    #         m.status = False
-    #         await m.save()
-    #         return json(dict(code=0, msg='权限禁用成功'))
-    #     else:
-    #         m.status = True
-    #         await m.save()
-    #         return json(dict(code=0, msg='权限启用成功'))
