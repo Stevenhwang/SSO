@@ -32,7 +32,7 @@ class RoleView(HTTPMethodView):
         await getattr(getattr(role, records), 'clear')()
         if data.get(records):
             async for record in eval(f"{records.rstrip('s').capitalize()}.filter(id__in={data.get(records)})"):
-                await getattr(getattr(role, 'users'), 'add')(record)
+                await getattr(getattr(role, records), 'add')(record)
 
         return json(dict(code=0, msg='更新成功'))
 
