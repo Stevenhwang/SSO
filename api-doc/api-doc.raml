@@ -280,6 +280,10 @@ traits:
     is: [hasHeaders, queryCommon]
     description: 获取用户列表
     queryParameters:
+      roles:
+        type: integer
+        required: false
+        description: 角色ID
       email:
         description: 邮箱
         type: string
@@ -380,6 +384,10 @@ traits:
     is: [hasHeaders, queryCommon]
     description: 获取前端组件列表
     queryParameters:
+      roles:
+        type: integer
+        required: false
+        description: 角色ID
       remark:
         type: string
         required: false
@@ -418,6 +426,10 @@ traits:
     is: [hasHeaders, queryCommon]
     description: 获取前端菜单列表
     queryParameters:
+      roles:
+        type: integer
+        required: false
+        description: 角色ID
       remark:
         type: string
         required: false
@@ -456,6 +468,10 @@ traits:
     is: [hasHeaders, queryCommon]
     description: 获取路由权限列表
     queryParameters:
+      roles:
+        type: integer
+        required: false
+        description: 角色ID
       uri:
         type: string
         required: false
