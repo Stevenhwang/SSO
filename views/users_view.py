@@ -48,7 +48,7 @@ class UserView(HTTPMethodView):
                 eu = await User.get_or_none(email=v)
                 if eu and u.email != v:
                     return json(dict(code=-1, msg='邮箱有重复！'))
-            if k == 'status':
+            if k == 'status' and not v:
                 await request.app.redis.execute('del', f"uid_{u.id}_auth_token")  # 清除token
             if k == 'google_key':
                 v = base64.b32encode(bytes(str(shortuuid.uuid() + shortuuid.uuid())[:-9],
