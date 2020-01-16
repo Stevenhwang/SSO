@@ -5,9 +5,9 @@ from models.admin import Menu
 
 class MenusView(HTTPMethodView):
     async def get(self, request):
-        menus = await Menu.search(**request.ctx.query)
+        menus, count = await Menu.search(**request.ctx.query)
         return json(dict(data=[menu.to_dict(exclude=['roles']) for menu in menus],
-                         count=len(menus), code=0, msg="成功"))
+                         count=count, code=0, msg="成功"))
 
     async def post(self, request):
         data = request.json

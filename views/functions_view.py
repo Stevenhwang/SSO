@@ -5,9 +5,9 @@ from models.admin import Function
 
 class FunctionsView(HTTPMethodView):
     async def get(self, request):
-        functions = await Function.search(**request.ctx.query)
+        functions, count = await Function.search(**request.ctx.query)
         return json(dict(data=[function.to_dict(exclude=['roles']) for function in functions],
-                         count=len(functions), code=0, msg="成功"))
+                         count=count, code=0, msg="成功"))
 
     async def post(self, request):
         data = request.json

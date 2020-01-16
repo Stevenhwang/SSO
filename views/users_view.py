@@ -9,9 +9,9 @@ import shortuuid
 
 class UsersView(HTTPMethodView):
     async def get(self, request):
-        users = await User.search(**request.ctx.query)
+        users, count = await User.search(**request.ctx.query)
         return json(dict(data=[user.to_dict(exclude=['password', 'roles']) for user in users],
-                         count=len(users), code=0, msg="成功"))
+                         count=count, code=0, msg="成功"))
 
     async def post(self, request):
         data = request.json

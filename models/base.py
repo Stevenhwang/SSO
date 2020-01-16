@@ -55,8 +55,10 @@ class BaseModel(Model):
             else:
                 attr_dict_list = [{a + '__icontains': search} for a in attributes]
             q_list = [Q(**a) for a in attr_dict_list]
-            return await cls.filter(Q(*q_list, join_type="OR")).filter(**query) \
+            count = await cls.filter(Q(*q_list, join_type="OR")).filter(**query).count()
+            results = await cls.filter(Q(*q_list, join_type="OR")).filter(**query) \
                 .limit(limit).offset((page - 1) * limit).order_by(order_by)
         else:
-            return await cls.filter(**query).limit(limit).offset((page - 1) * limit) \
-                .order_by(order_by)
+            count = await cls.filter(**query).count()
+            results = await cls.filter(**query).limit(limit).offset((page - 1) * limit).order_by(order_by)
+        return results, count

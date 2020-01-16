@@ -5,9 +5,9 @@ from models.admin import Role, User, Component, Function, Menu
 
 class RolesView(HTTPMethodView):
     async def get(self, request):
-        roles = await Role.search(**request.ctx.query)
+        roles, count = await Role.search(**request.ctx.query)
         return json(dict(data=[role.to_dict(exclude=['users', 'components', 'menus', 'functions']) for role in roles],
-                         count=len(roles), code=0, msg="成功"))
+                         count=count, code=0, msg="成功"))
 
     async def post(self, request):
         data = request.json
