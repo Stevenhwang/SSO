@@ -27,16 +27,15 @@ async def login(request):
         return json(dict(code=3, msg='密码错误'))
     if not user.status:
         return json(dict(code=4, msg='账号被禁用'))
-    # 如果被标记为必须动态验证切没有输入动态密钥，则跳转到输入密钥的地方
     if user.google_key:
         if not dynamic:
             # 第一次不带MFA的认证
-            return json(dict(code=5, msg='跳转二次认证'))
+            return json(dict(code=5, msg='需要二次认证验证码'))
         else:
             # 二次认证
             t_otp = pyotp.TOTP(user.google_key)
             if t_otp.now() != str(dynamic):
-                return json(dict(code=6, msg='MFA错误'))
+                return json(dict(code=6, msg='验证码错误'))
     # 生成token
     token_info = dict(user_id=user.id, username=user.name,
                       email=user.email, is_super=user.is_super)
