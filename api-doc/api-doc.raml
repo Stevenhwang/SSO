@@ -506,6 +506,16 @@ traits:
             type: boolean
             required: false
             description: 是否启用
+  put:
+    is: [hasHeaders]
+    description: 批量新增路由权限
+    body:
+      application/json:
+        properties:
+          data:
+            type: string
+            required: true
+            description: 批量路由权限数据
   /{functionId}:
     put:
       is: [hasHeaders]

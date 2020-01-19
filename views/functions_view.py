@@ -1,6 +1,7 @@
 from sanic.response import json
 from sanic.views import HTTPMethodView
 from models.admin import Function
+import re
 
 
 class FunctionsView(HTTPMethodView):
@@ -20,6 +21,32 @@ class FunctionsView(HTTPMethodView):
         nr = Function(**data)
         await nr.save()
         return json(dict(code=0, msg='权限创建成功!'))
+
+    async def put(self, request):
+        # 批量新增权限接口
+        raw_data = request.json.get('data')
+        raw_list = raw_data.split(',')
+        raw_list = [r.strip() for r in raw_list]
+        data_list = []
+        fail_list = []
+        for raw in raw_list:
+            p = re.split(r'\s+', raw)
+            p = [r.strip() for r in p]
+            if len(p) != 3:
+                return json(dict(code=-1, msg=f'{p} 格式错误!'))
+            data_list.append(dict(name=p[0], uri=p[1], method_type=p[2], status=True))
+        for data in data_list:
+            for f in ['name', 'uri', 'method_type']:
+                if f not in data.keys():
+                    fail_list.append(str(data) + ' 关键参数不能为空')
+                continue
+            er = await Function.get_or_none(name=data.get('name'))
+            if er:
+                fail_list.append(str(data) + ' 此权限已注册！')
+                continue
+            nr = Function(**data)
+            await nr.save()
+        return json(dict(code=0, msg='批量创建权限成功!', fail_list=fail_list))
 
 
 class FunctionView(HTTPMethodView):
