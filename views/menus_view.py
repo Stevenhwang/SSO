@@ -33,7 +33,7 @@ class MenusView(HTTPMethodView):
             p = [r.strip() for r in p]
             if len(p) != 2:
                 return json(dict(code=-1, msg=f'{p} 格式错误!'))
-            data_list.append(dict(remark=p[0], name=p[1], status=True))
+            data_list.append(dict(name=p[0], remark=p[1], status=True))
         for data in data_list:
             for f in ['name', 'remark']:
                 if f not in data.keys():
