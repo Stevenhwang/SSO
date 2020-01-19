@@ -466,6 +466,16 @@ traits:
             type: boolean
             required: false
             description: 是否启用
+  put:
+    is: [hasHeaders]
+    description: 批量新增菜单
+    body:
+      application/json:
+        properties:
+          data:
+            type: string
+            required: true
+            description: 批量菜单数据
   /{menuId}:
     put:
       is: [hasHeaders]
