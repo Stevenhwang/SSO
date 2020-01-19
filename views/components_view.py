@@ -1,6 +1,7 @@
 from sanic.response import json
 from sanic.views import HTTPMethodView
 from models.admin import Component
+import re
 
 
 class ComponentsView(HTTPMethodView):
@@ -19,6 +20,32 @@ class ComponentsView(HTTPMethodView):
         nr = Component(**data)
         await nr.save()
         return json(dict(code=0, msg='组件创建成功!'))
+
+    async def put(self, request):
+        # 批量新增组件接口
+        raw_data = request.json.get('data')
+        raw_list = raw_data.split(',')
+        raw_list = [r.strip() for r in raw_list]
+        data_list = []
+        fail_list = []
+        for raw in raw_list:
+            p = re.split(r'\s+', raw)
+            p = [r.strip() for r in p]
+            if len(p) != 2:
+                return json(dict(code=-1, msg=f'{p} 格式错误!'))
+            data_list.append(dict(remark=p[0], name=p[1], status=True))
+        for data in data_list:
+            for f in ['name', 'remark']:
+                if f not in data.keys():
+                    fail_list.append(str(data) + ' 关键参数不能为空')
+                continue
+            er = await Component.get_or_none(name=data.get('name'))
+            if er:
+                fail_list.append(str(data) + ' 此组件已注册！')
+                continue
+            nr = Component(**data)
+            await nr.save()
+        return json(dict(code=0, msg='批量创建组件成功!', fail_list=fail_list))
 
 
 class ComponentView(HTTPMethodView):
