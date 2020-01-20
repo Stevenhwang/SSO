@@ -18,7 +18,7 @@ async def auth_check(request):
     if user.is_super:
         return text("true")
     else:
-        async for role in Role.filter(users=uid):
+        async for role in Role.filter(users=uid).prefetch_related("functions"):
             for f in role.functions:
                 if f.method_type == method and re.match(r'{}'.format(f.uri), uri) and f.status:
                     return text("true")
